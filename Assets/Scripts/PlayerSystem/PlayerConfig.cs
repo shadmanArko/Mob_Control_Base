@@ -18,5 +18,8 @@ namespace PlayerSystem
     
         [Header("Visual Settings")]
         public bool isBig = false;
+    
+        [Header("Score Settings")]
+        public int enemyKillScore = 2;
     }
 }

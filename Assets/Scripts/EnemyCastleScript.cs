@@ -6,6 +6,7 @@ public class EnemyCastleScript : MonoBehaviour
     [SerializeField] ParticleSystem castleParticular;
     [SerializeField] TextMeshProUGUI health_text;
     [SerializeField] int health = 100;
+    [SerializeField] DamageFlickerController damageFlickerController;
 
     [SerializeField] Transform spawnPoint;
     [SerializeField] GameObject enemy;
@@ -72,5 +73,9 @@ public class EnemyCastleScript : MonoBehaviour
     private void CastleHitEffect()
     {
         castleParticular.Play();
+        if (damageFlickerController!=null)
+        {
+            damageFlickerController.TriggerDamageFlicker();
+        }
     }
 }

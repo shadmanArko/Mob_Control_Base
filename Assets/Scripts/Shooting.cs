@@ -6,6 +6,7 @@ public class Shooting : MonoBehaviour
     [SerializeField] Transform firePoint;
     [SerializeField] GameObject bulletPrefab;
     [SerializeField] GameObject ultBulletPrefab;
+    [SerializeField] private CannonRecoil cannonRecoil;
 
     [SerializeField] float fireCd;
     private float fireTimer;
@@ -24,6 +25,7 @@ public class Shooting : MonoBehaviour
     {
         updateChargeBar();
         fireTimer -= Time.deltaTime;
+    
         if (Input.GetMouseButton(0))
         {
             uIManager.FirstTouch(); // intro hand kapanması için
@@ -31,14 +33,42 @@ public class Shooting : MonoBehaviour
             if (fireTimer <= 0)
             {
                 if (currentCharge < chargeAmount) { currentCharge++; }
+            
+                // Trigger recoil when shooting
                 Shoot();
+                TriggerShootRecoil(); // Add recoil effect
+            
                 fireTimer = fireCd;
             }
         }
+    
         if (Input.GetMouseButtonUp(0) && (currentCharge >= chargeAmount))
         {
+            // Trigger enhanced recoil for ultimate shot
             ShootUlt();
+            TriggerUltimateRecoil(); // Add stronger recoil for ultimate
+        
             currentCharge = 0;
+        }
+    }
+    
+    private void TriggerShootRecoil()
+    {
+        if (cannonRecoil != null)
+        {
+            cannonRecoil.TriggerRecoil(); // Simple recoil for regular shots
+        }
+    }
+    
+    private void TriggerUltimateRecoil()
+    {
+        if (cannonRecoil != null)
+        {
+            
+            _ = cannonRecoil.TriggerEnhancedRecoilAsync();
+        
+            
+            // await cannonRecoil.TriggerEnhancedRecoilAsync();
         }
     }
     private void updateChargeBar()

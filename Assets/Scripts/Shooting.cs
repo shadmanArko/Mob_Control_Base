@@ -6,7 +6,7 @@ using Zenject;
 public class Shooting : MonoBehaviour
 {
     [Inject] private IPlayerFactory _playerFactory;
-    public UIManager uIManager;
+    //public UIManager uIManager;
     [SerializeField] Transform firePoint;
     [SerializeField] GameObject bulletPrefab;
     [SerializeField] GameObject ultBulletPrefab;
@@ -33,7 +33,7 @@ public class Shooting : MonoBehaviour
     
         if (Input.GetMouseButton(0))
         {
-            uIManager.FirstTouch(); // intro hand kapanması için
+            //uIManager.FirstTouch(); // intro hand kapanması için
 
             if (fireTimer <= 0)
             {

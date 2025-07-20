@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Zenject;
 
 namespace DefaultNamespace.EnemySystem
 {
@@ -11,6 +12,7 @@ namespace DefaultNamespace.EnemySystem
         private readonly EnemyModel _model;
         private readonly EnemyView _view;
         private readonly CompositeDisposable _disposables = new CompositeDisposable();
+        private readonly HudView _hudView;
 
         public EnemyModel Model => _model;
         public EnemyView View => _view;
@@ -20,11 +22,12 @@ namespace DefaultNamespace.EnemySystem
         public int Count => _disposables.Count;
         public bool IsReadOnly => false;
 
-        public EnemyPresenter(EnemyModel model, EnemyView view)
+        public EnemyPresenter(EnemyModel model, EnemyView view, HudView hudView)
         {
             _model = model;
             _view = view;
-            
+            _hudView = hudView;
+
             SubscribeToModel();
             SubscribeToView();
         }
@@ -94,7 +97,9 @@ namespace DefaultNamespace.EnemySystem
 
         private void OnEndGameCollision()
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            _hudView.failedPopup.ShowPopupWithOvershoot();
+            _hudView.blurAnimation.ShowBlurPanel();
         }
 
         private void OnEnemyDeath()

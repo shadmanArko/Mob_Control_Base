@@ -30,6 +30,7 @@ namespace DefaultNamespace.EnemySystem
         private readonly EnemyConfig _bigEnemyConfig;
         private readonly Transform _poolParent;
         private readonly EnemyModel.Factory _modelFactory;
+        private readonly HudView _hudView;
         private readonly DiContainer _container;
 
         private readonly Dictionary<EnemyType, IObjectPool<EnemyPresenter>> _enemyPools;
@@ -42,7 +43,7 @@ namespace DefaultNamespace.EnemySystem
             EnemyConfig bigEnemyConfig,
             Transform poolParent,
             EnemyModel.Factory modelFactory,
-            DiContainer container)
+            DiContainer container, HudView hudView)
         {
             _normalEnemyPrefab = normalEnemyPrefab;
             _bigEnemyPrefab = bigEnemyPrefab;
@@ -51,6 +52,7 @@ namespace DefaultNamespace.EnemySystem
             _poolParent = poolParent;
             _modelFactory = modelFactory;
             _container = container;
+            _hudView = hudView;
 
             _enemyPools = new Dictionary<EnemyType, IObjectPool<EnemyPresenter>>();
             
@@ -101,7 +103,7 @@ namespace DefaultNamespace.EnemySystem
             }
 
             EnemyModel model = _modelFactory.Create(config);
-            EnemyPresenter presenter = new EnemyPresenter(model, view);
+            EnemyPresenter presenter = new EnemyPresenter(model, view, _hudView);
 
             // Subscribe to death event for automatic pooling
             model.IsDead

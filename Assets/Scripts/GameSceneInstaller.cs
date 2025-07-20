@@ -10,6 +10,7 @@ public class GameSceneInstaller : ScriptableObjectInstaller<GameSceneInstaller>
     [Header("Player System")]
     [SerializeField] private PlayerConfig playerConfig;
     [SerializeField] private GameObject playerPrefab;
+    [SerializeField] private HudView hudView;
     
     [Header("Enemy System")]
     [SerializeField] private GameObject normalEnemyPrefab;
@@ -17,6 +18,7 @@ public class GameSceneInstaller : ScriptableObjectInstaller<GameSceneInstaller>
     [SerializeField] private EnemyConfig normalEnemyConfig;
     [SerializeField] private EnemyConfig bigEnemyConfig;
     [SerializeField] private Transform enemyPoolParent;
+    [SerializeField] private EnemyManager enemyManager;
     
     public override void InstallBindings()
     {
@@ -25,6 +27,9 @@ public class GameSceneInstaller : ScriptableObjectInstaller<GameSceneInstaller>
         
         // Enemy System Bindings
         BindEnemySystem();
+        
+        // Bind HUD View
+        Container.Bind<HudView>().FromComponentInNewPrefab(hudView).AsSingle().NonLazy();
     }
     
     private void BindPlayerSystem()
@@ -66,6 +71,6 @@ public class GameSceneInstaller : ScriptableObjectInstaller<GameSceneInstaller>
             );
         
         // Bind Enemy Manager
-        Container.Bind<EnemyManager>().FromComponentInHierarchy().AsSingle();
+        Container.Bind<EnemyManager>().FromComponentInNewPrefab(enemyManager).AsSingle();
     }
 }

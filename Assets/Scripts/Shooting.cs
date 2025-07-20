@@ -1,7 +1,11 @@
+using PlayerSystem;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
+
 public class Shooting : MonoBehaviour
 {
+    [Inject] private IPlayerFactory _playerFactory;
     public UIManager uIManager;
     [SerializeField] Transform firePoint;
     [SerializeField] GameObject bulletPrefab;
@@ -18,6 +22,7 @@ public class Shooting : MonoBehaviour
     void Start()
     {
         fireTimer = 0;
+        _playerFactory.PreWarmPool(50);
     }
 
     // Update is called once per frame
@@ -79,7 +84,8 @@ public class Shooting : MonoBehaviour
     }
     private void Shoot()
     {
-        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
+        var player = _playerFactory.CreatePlayer(firePoint.position, Quaternion.identity);
+        //GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
         // bullet.GetComponent<Rigidbody>().AddForce(new Vector3(0,0,10),ForceMode.Impulse);
     }
     private void ShootUlt()

@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace PlayerSystem
 {
     public interface IPlayerPresenter
@@ -5,5 +7,7 @@ namespace PlayerSystem
         void SetView(IPlayerView view);
         void Initialize();
         void TakeDamage(int damage);
+        GameObject GetCloneSource();
+        void SetCloneSource(GameObject source);
     }
 }

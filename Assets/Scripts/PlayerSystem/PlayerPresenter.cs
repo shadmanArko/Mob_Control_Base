@@ -6,14 +6,16 @@ namespace PlayerSystem
 {
     public class PlayerPresenter : IPlayerPresenter, IDisposable
     {
-        private readonly PlayerModel _model;
+        private PlayerModel _model;
         private IPoolablePlayerView _view;
         private CompositeDisposable _disposables;
         private bool _isInitialized;
+        
+        private readonly PlayerModel.Factory _modelFactory;
 
-        public PlayerPresenter(PlayerModel model)
+        public PlayerPresenter(PlayerModel.Factory modelFactory)
         {
-            _model = model;
+            _modelFactory = modelFactory;
         }
 
         public void SetView(IPlayerView view)
@@ -34,6 +36,8 @@ namespace PlayerSystem
                 return;
             }
 
+            // Create the model when initializing
+            _model = _modelFactory.Create();
             _disposables = new CompositeDisposable();
             SetupSubscriptions();
             _isInitialized = true;
@@ -41,12 +45,20 @@ namespace PlayerSystem
 
         private void ResetForReuse()
         {
-            // Reset model state for reuse
-            // Model will handle its own reset logic
+            // Dispose old model and create a new one for reuse
+            _model?.Dispose();
+            _model = _modelFactory.Create();
+            
+            // Clear old subscriptions and setup new ones
+            _disposables?.Dispose();
+            _disposables = new CompositeDisposable();
+            SetupSubscriptions();
         }
 
         private void SetupSubscriptions()
         {
+            if (_model == null || _view == null) return;
+
             Observable.EveryUpdate()
                 .Where(_ => _view.IsActive)
                 .Subscribe(_ => HandleUpdate())
@@ -79,11 +91,14 @@ namespace PlayerSystem
 
         private void HandleUpdate()
         {
+            if (_model == null) return;
             _model.UpdateTargeting(_view.Position);
         }
 
         private void HandleFixedUpdate()
         {
+            if (_model == null) return;
+            
             _view.SetVelocity(Vector3.zero);
             var newPosition = _model.CalculateNewPosition(_view.Position, Time.fixedDeltaTime);
             _view.SetPosition(newPosition);
@@ -91,7 +106,7 @@ namespace PlayerSystem
 
         private void UpdateViewScale()
         {
-            if (_view.IsActive)
+            if (_view.IsActive && _model != null)
             {
                 var newScale = _model.CalculateScale(_view.StartScale);
                 _view.SetScale(newScale);
@@ -100,6 +115,8 @@ namespace PlayerSystem
 
         private void HandleCollision(Collision collision)
         {
+            if (_model == null) return;
+            
             if (collision.gameObject.CompareTag("Enemy"))
             {
                 _model.HandleCollisionWithEnemy(collision.gameObject);
@@ -108,6 +125,8 @@ namespace PlayerSystem
 
         private void HandleTrigger(Collider other)
         {
+            if (_model == null) return;
+            
             switch (other.tag)
             {
                 case "SpeedReducePoint":
@@ -124,13 +143,24 @@ namespace PlayerSystem
 
         public void TakeDamage(int damage)
         {
-            _model.TakeDamage(damage);
+            _model?.TakeDamage(damage);
+        }
+
+        public GameObject GetCloneSource()
+        {
+            return _model.CloneGameObject;
+        }
+        
+        public void SetCloneSource(GameObject clone)
+        {
+            _model.CloneGameObject = clone;
         }
 
         public void Dispose()
         {
             _disposables?.Dispose();
             _model?.Dispose();
+            _isInitialized = false;
         }
     }
 }

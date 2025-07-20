@@ -29,11 +29,13 @@ namespace PlayerSystem
         public bool IsAlive => _health.Value > 0;
         public float HealthPercentage => (float)_health.Value / _config.maxHealth;
         public bool IsBig => _config.isBig;
+        public GameObject CloneGameObject;
 
         private CompositeDisposable _disposables = new CompositeDisposable();
 
         public PlayerModel(PlayerConfig config, IScoreService scoreService)
         {
+            CloneGameObject = null;
             _config = config;
             _scoreService = scoreService;
             Initialize();

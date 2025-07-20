@@ -1,3 +1,4 @@
+using DefaultNamespace;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -61,10 +62,10 @@ public class EnemyController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Player") && fireTimer <= 0)
+        var damageable = collision.gameObject.GetComponent<IDamageable>();
+        if (damageable != null)
         {
-            collision.gameObject.GetComponent<PlayerController>().getHit(damage);
-
+            damageable.TakeDamage(damage);
             fireTimer = fireCd;
         }
         if (collision.gameObject.CompareTag("PlayerCastle") && fireTimer <= 0)

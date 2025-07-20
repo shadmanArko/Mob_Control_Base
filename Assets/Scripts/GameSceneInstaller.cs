@@ -1,3 +1,4 @@
+using DefaultNamespace;
 using PlayerSystem;
 using UnityEngine;
 using Zenject;
@@ -7,7 +8,7 @@ public class GameSceneInstaller : ScriptableObjectInstaller<GameSceneInstaller>
 {
     [SerializeField] private PlayerConfig playerConfig;
     [SerializeField] private GameObject playerPrefab;
-    [SerializeField] private Transform poolParent;
+    ///[SerializeField] private Transform poolParent;
     public override void InstallBindings()
     {
         // Bind Config
@@ -26,6 +27,8 @@ public class GameSceneInstaller : ScriptableObjectInstaller<GameSceneInstaller>
         Container.Bind<IPlayerFactory>()
             .To<PlayerFactory>()
             .AsSingle()
-            .WithArguments(playerPrefab, poolParent);
+            .WithArguments(playerPrefab);
+        
+       // Container.Bind<IDamageable>().To<PlayerView>().AsTransient();
     }
 }

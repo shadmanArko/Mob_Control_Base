@@ -1,15 +1,18 @@
 using System;
+using DefaultNamespace;
 using UniRx;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Zenject;
 
 namespace PlayerSystem
 {
-    public class PlayerView : MonoBehaviour, IPoolablePlayerView
+    public class PlayerView : MonoBehaviour, IPoolablePlayerView, IDamageable, ICloneableObject
     {
         public Transform Transform => transform;
         public Vector3 Position => transform.position;
         public Vector3 StartScale { get; private set; }
+        public GameObject cloneGameObject;
 
         public IObservable<Collision> OnCollisionEntered => _onCollisionEntered.AsObservable();
         public IObservable<Collider> OnTriggerEntered => _onTriggerEntered.AsObservable();
@@ -108,6 +111,21 @@ namespace PlayerSystem
         {
             if (IsActive)
                 _onTriggerEntered.OnNext(other);
+        }
+
+        public void TakeDamage(int damage)
+        {
+            _presenter?.TakeDamage(damage);
+        }
+
+        public GameObject GetCloneSource()
+        {
+           return _presenter?.GetCloneSource();
+        }
+
+        public void SetCloneSource(GameObject source)
+        {
+            _presenter.SetCloneSource(source);
         }
     }
 }

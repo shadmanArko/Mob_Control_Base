@@ -1,5 +1,7 @@
 using UnityEngine;
 using DG.Tweening;
+using PlayerSystem;
+using Zenject;
 
 public class DoorScript : MonoBehaviour
 {
@@ -11,6 +13,8 @@ public class DoorScript : MonoBehaviour
 
     [Header("References")]
     [SerializeField] private Transform _playerTransform;
+    
+    [Inject] private IPlayerFactory _playerFactory;
 
     private void Start()
     {
@@ -39,20 +43,21 @@ public class DoorScript : MonoBehaviour
     {
         if (!other.CompareTag("Player")) return;
 
-        PlayerController playerController = other.GetComponent<PlayerController>();
-        if (playerController == null || playerController.cloneSource == gameObject) return;
+        var playerView = other.GetComponent<PlayerView>();
+        if (playerView == null || playerView.GetCloneSource() == gameObject) return;
 
-        SpawnPlayerClones(playerController);
+        SpawnPlayerClones(playerView);
     }
 
-    private void SpawnPlayerClones(PlayerController originalPlayer)
+    private void SpawnPlayerClones(PlayerView originalPlayer)
     {
-        originalPlayer.cloneSource = gameObject;
+        originalPlayer.SetCloneSource(gameObject);
 
         for (int i = 0; i < _cloneAmount - 1; i++)
         {
             Vector3 spawnPosition = CalculateRandomSpawnPosition(originalPlayer.transform.position);
-            Instantiate(originalPlayer.gameObject, spawnPosition, Quaternion.identity);
+            var newPlayer = _playerFactory.CreatePlayer(spawnPosition, Quaternion.identity);
+            newPlayer.SetCloneSource(gameObject);
         }
     }
 

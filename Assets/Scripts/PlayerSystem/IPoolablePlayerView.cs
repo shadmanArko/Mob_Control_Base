@@ -9,5 +9,6 @@ namespace PlayerSystem
         void Activate(Vector3 position, Quaternion rotation);
         void Deactivate();
         IObservable<IPoolablePlayerView> OnReturnToPool { get; }
+        void SetCloneSource(GameObject source);
     }
 }

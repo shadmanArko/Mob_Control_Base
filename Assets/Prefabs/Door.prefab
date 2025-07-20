@@ -402,7 +402,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6530945134257752267}
   m_Layer: 0
-  m_Name: "S\xFCtunlar"
+  m_Name: Rods
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

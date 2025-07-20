@@ -54,6 +54,8 @@ public class UIBlurAnimation : MonoBehaviour
     [ContextMenu("Show Blur Panel")]
     public void ShowBlurPanel()
     {
+        if (gameObject.activeSelf) return;
+        
         gameObject.SetActive(true);
         
         if (canvasGroup != null)

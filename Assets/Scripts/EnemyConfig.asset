@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77cfd8f5d33f466784b8de2bf291da65, type: 3}
   m_Name: EnemyConfig
   m_EditorClassIdentifier: 
-  maxHealth: 100
-  damage: 50
+  maxHealth: 10
+  damage: 5
   moveSpeed: 5
   fireCooldown: 1
   isBig: 0

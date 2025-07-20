@@ -65,7 +65,7 @@ public class EnemyController : MonoBehaviour
         var damageable = collision.gameObject.GetComponent<IDamageable>();
         if (damageable != null)
         {
-            damageable.TakeDamage(damage);
+            damageable.DoDamageToPlayer(damage);
             fireTimer = fireCd;
         }
         if (collision.gameObject.CompareTag("PlayerCastle") && fireTimer <= 0)

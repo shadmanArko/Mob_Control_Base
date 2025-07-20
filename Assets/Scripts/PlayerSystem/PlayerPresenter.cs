@@ -146,6 +146,11 @@ namespace PlayerSystem
             _model?.TakeDamage(damage);
         }
 
+        public int DoDamage()
+        {
+            return _model.DoDamage();
+        }
+
         public GameObject GetCloneSource()
         {
             return _model.CloneGameObject;

@@ -2,6 +2,7 @@ namespace DefaultNamespace
 {
     public interface IDamageable
     {
-        void TakeDamage(int damage);
+        void DoDamageToPlayer(int damage);
+        int TakeDamageFromPlayer();
     }
 }

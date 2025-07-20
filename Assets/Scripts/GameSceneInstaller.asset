@@ -14,3 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerConfig: {fileID: 11400000, guid: 9e1dca5a67f344934bdff78833666830, type: 2}
   playerPrefab: {fileID: 7759689178159521663, guid: 354c9fda10403483ba75265800760c78, type: 3}
+  normalEnemyPrefab: {fileID: 7759689178159521663, guid: 619fe8359779241879a475f56d7e316f, type: 3}
+  bigEnemyPrefab: {fileID: 1233466201710250099, guid: bb3c45524220b4178960341046f80f91, type: 3}
+  normalEnemyConfig: {fileID: 11400000, guid: ae80eb0972fd44146b949ed2db101cee, type: 2}
+  bigEnemyConfig: {fileID: 11400000, guid: 22768950de9df443fa780fbd38426eba, type: 2}
+  enemyPoolParent: {fileID: 0}

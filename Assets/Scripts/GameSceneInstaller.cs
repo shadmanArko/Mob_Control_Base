@@ -1,4 +1,5 @@
 using DefaultNamespace;
+using DefaultNamespace.EnemySystem;
 using PlayerSystem;
 using UnityEngine;
 using Zenject;
@@ -6,10 +7,27 @@ using Zenject;
 [CreateAssetMenu(fileName = "GameSceneInstaller", menuName = "Installers/GameSceneInstaller")]
 public class GameSceneInstaller : ScriptableObjectInstaller<GameSceneInstaller>
 {
+    [Header("Player System")]
     [SerializeField] private PlayerConfig playerConfig;
     [SerializeField] private GameObject playerPrefab;
-    ///[SerializeField] private Transform poolParent;
+    
+    [Header("Enemy System")]
+    [SerializeField] private GameObject normalEnemyPrefab;
+    [SerializeField] private GameObject bigEnemyPrefab;
+    [SerializeField] private EnemyConfig normalEnemyConfig;
+    [SerializeField] private EnemyConfig bigEnemyConfig;
+    [SerializeField] private Transform enemyPoolParent;
+    
     public override void InstallBindings()
+    {
+        // Player System Bindings
+        BindPlayerSystem();
+        
+        // Enemy System Bindings
+        BindEnemySystem();
+    }
+    
+    private void BindPlayerSystem()
     {
         // Bind Config
         Container.Bind<PlayerConfig>().FromInstance(playerConfig).AsSingle();
@@ -28,7 +46,26 @@ public class GameSceneInstaller : ScriptableObjectInstaller<GameSceneInstaller>
             .To<PlayerFactory>()
             .AsSingle()
             .WithArguments(playerPrefab);
+    }
+    
+    private void BindEnemySystem()
+    {
+        // Bind Enemy Model Factory
+        Container.BindFactory<EnemyConfig, EnemyModel, EnemyModel.Factory>();
         
-       // Container.Bind<IDamageable>().To<PlayerView>().AsTransient();
+        // Bind Enemy Factory
+        Container.Bind<IEnemyFactory>()
+            .To<EnemyFactory>()
+            .AsSingle()
+            .WithArguments(
+                normalEnemyPrefab, 
+                bigEnemyPrefab, 
+                normalEnemyConfig, 
+                bigEnemyConfig, 
+                enemyPoolParent
+            );
+        
+        // Bind Enemy Manager
+        Container.Bind<EnemyManager>().FromComponentInHierarchy().AsSingle();
     }
 }

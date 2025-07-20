@@ -109,7 +109,7 @@ public class PlayerController : MonoBehaviour
         }
         if (other.gameObject.CompareTag("EnemyCastle") && fireTimer <= 0)
         {
-            other.gameObject.GetComponent<EnemyCastleScript>().getHit(damage);
+            other.gameObject.GetComponent<EnemyCastleScript>().GetHit(damage);
             fireTimer = fireCd;
         }
 

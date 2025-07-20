@@ -1,4 +1,5 @@
 using System.Linq;
+using DefaultNamespace.EnemySystem;
 using UniRx;
 using UnityEngine;
 using Zenject;
@@ -121,6 +122,11 @@ namespace PlayerSystem
             }
         }
 
+        public int DoDamage()
+        {
+            return _config.damage;
+        }
+
         public bool CanFire()
         {
             return _fireTimer.Value <= 0;
@@ -143,10 +149,10 @@ namespace PlayerSystem
         {
             if (!CanFire()) return;
 
-            var enemyController = enemy.GetComponent<EnemyController>();
-            if (enemyController != null)
+            var enemyView = enemy.GetComponent<EnemyView>();
+            if (enemyView != null)
             {
-                enemyController.getHit(_config.damage);
+                // enemyView.getHit(_config.damage);
                 _scoreService.AddScore(_config.enemyKillScore);
                 ResetFireTimer();
             }
@@ -159,7 +165,7 @@ namespace PlayerSystem
             var castleScript = castle.GetComponent<EnemyCastleScript>();
             if (castleScript != null)
             {
-                castleScript.getHit(_config.damage);
+                castleScript.GetHit(_config.damage);
                 ResetFireTimer();
             }
         }

@@ -113,9 +113,14 @@ namespace PlayerSystem
                 _onTriggerEntered.OnNext(other);
         }
 
-        public void TakeDamage(int damage)
+        public void DoDamageToPlayer(int damage)
         {
             _presenter?.TakeDamage(damage);
+        }
+
+        public int TakeDamageFromPlayer()
+        {
+            return _presenter.DoDamage();
         }
 
         public GameObject GetCloneSource()
